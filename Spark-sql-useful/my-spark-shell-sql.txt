@@ -1,0 +1,57 @@
+
+spark-shell
+
+val usersDF = spark.read.load("file:///C:/Users/skhan/git/SparkDemo/Datasets/sql-datasets/users.parquet")
+
+usersDF.select("name", "favorite_color").write.save("file:///C:/Users/skhan/git/SparkDemo/namesAndFavColors.parquet")
+
+import org.apache.spark.sql._; --SaveMode
+
+usersDF.select("name", "favorite_color").write.mode(SaveMode.Overwrite).save("file:///C:/Users/skhan/git/SparkDemo/namesAndFavColors.parquet")
+
+--Save Modes
+
+--SaveMode.ErrorIfExists
+--SaveMode.Append
+--SaveMode.Overwrite
+--SaveMode.Ignore
+
+--Manually Specifying Options - like json or u can use spark.read.json
+
+val peopleDF = spark.read.format("json").load("file:///C:/Users/skhan/git/SparkDemo/Datasets/sql-datasets/people.json")
+
+peopleDF.select("name", "age").write.format("parquet").save("file:///C:/Users/skhan/git/SparkDemo/namesAndAges.parquet")
+
+val sqlDF = spark.sql("SELECT * FROM parquet.`C:/Users/skhan/git/SparkDemo/namesAndAges.parquet`")
+
+sqlDF.show
+
+peopleDF.write.bucketBy(42, "name").sortBy("age").saveAsTable("people_bucketed")
+
+sql("select * from people_bucketed").show
+
+scala> peopleDF.write.bucketBy(42, "name").sortBy("age").saveAsTable("people_buc
+keted")
+18/02/24 11:03:49 WARN HiveExternalCatalog: Persisting bucketed data source tabl
+e `default`.`people_bucketed` into Hive metastore in Spark SQL specific format,
+which is NOT compatible with Hive.
+
+scala> sql("select * from people_bucketed").show
++----+-------+
+| age|   name|
++----+-------+
+|null|Michael|
+|  30|   Andy|
+|  19| Justin|
++----+-------+
+
+
+scala> spark.sql("select * from people_bucketed").show()
++----+-------+
+| age|   name|
++----+-------+
+|null|Michael|
+|  30|   Andy|
+|  19| Justin|
++----+-------+
+

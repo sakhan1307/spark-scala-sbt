@@ -1,0 +1,174 @@
+
+C:\Users\skhan\git\SparkDemo>spark-shell
+scala> val rf = sc.parallelize
+
+def parallelize[T](seq: Seq[T],numSlices: Int)(implicit evidence$1: scala.reflec
+t.ClassTag[T]): org.apache.spark.rdd.RDD[T]
+
+scala> val rf = sc.parallelize(0 to 9)
+rf: org.apache.spark.rdd.RDD[Int] = ParallelCollectionRDD[0] at parallelize at <
+console>:24
+
+scala> rf.collect
+[Stage 0:>                                                          (0 + 0) / 4]
+
+res0: Array[Int] = Array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9)
+
+scala> val r0=rf.filter(_%1==0)
+r0: org.apache.spark.rdd.RDD[Int] = MapPartitionsRDD[1] at filter at <console>:2
+6
+
+scala> val r1=sc.parallelize
+
+def parallelize[T](seq: Seq[T],numSlices: Int)(implicit evidence$1: scala.reflec
+t.ClassTag[T]): org.apache.spark.rdd.RDD[T]
+
+scala> val r1=sc.parallelize(0 to 90 by 10)
+r1: org.apache.spark.rdd.RDD[Int] = ParallelCollectionRDD[2] at parallelize at <
+console>:24
+
+scala> r1.collect
+res1: Array[Int] = Array(0, 10, 20, 30, 40, 50, 60, 70, 80, 90)
+
+scala> val r10= r0 cartesian
+
+def cartesian[U](other: org.apache.spark.rdd.RDD[U])(implicit evidence$5: scala.
+reflect.ClassTag[U]): org.apache.spark.rdd.RDD[(Int, U)]
+
+scala> val r10= r0 cartesian r1
+r10: org.apache.spark.rdd.RDD[(Int, Int)] = CartesianRDD[3] at cartesian at <con
+sole>:30
+
+scala> r10.collect
+res2: Array[(Int, Int)] = Array((0,0), (0,10), (1,0), (1,10), (0,20), (0,30), (0
+,40), (1,20), (1,30), (1,40), (0,50), (0,60), (1,50), (1,60), (0,70), (0,80), (0
+,90), (1,70), (1,80), (1,90), (2,0), (2,10), (3,0), (3,10), (4,0), (4,10), (2,20
+), (2,30), (2,40), (3,20), (3,30), (3,40), (4,20), (4,30), (4,40), (2,50), (2,60
+), (3,50), (3,60), (4,50), (4,60), (2,70), (2,80), (2,90), (3,70), (3,80), (3,90
+), (4,70), (4,80), (4,90), (5,0), (5,10), (6,0), (6,10), (5,20), (5,30), (5,40),
+ (6,20), (6,30), (6,40), (5,50), (5,60), (6,50), (6,60), (5,70), (5,80), (5,90),
+ (6,70), (6,80), (6,90), (7,0), (7,10), (8,0), (8,10), (9,0), (9,10), (7,20), (7
+,30), (7,40), (8,20), (8,30), (8,40), (9,20), (9,30), (9,40), (7,50), (7,60), (8
+,50), (8,60), (9,50), (9,60), (7,70), (7,80), (7,90), (8,70), (8,80), (8,90),...
+
+scala> val r11=r0.map(n=>(n,n))
+r11: org.apache.spark.rdd.RDD[(Int, Int)] = MapPartitionsRDD[4] at map at <conso
+le>:28
+
+scala> val r12=r0 zip r1
+r12: org.apache.spark.rdd.RDD[(Int, Int)] = ZippedPartitionsRDD2[5] at zip at <c
+onsole>:30
+
+scala> r11.collect
+res3: Array[(Int, Int)] = Array((0,0), (1,1), (2,2), (3,3), (4,4), (5,5), (6,6),
+ (7,7), (8,8), (9,9))
+
+scala> r12.collect
+res4: Array[(Int, Int)] = Array((0,0), (1,10), (2,20), (3,30), (4,40), (5,50), (
+6,60), (7,70), (8,80), (9,90))
+
+scala> val r13=r1.keyBy
+   def keyBy[K](f: Int => K): org.apache.spark.rdd.RDD[(K, Int)]
+
+scala> val r13=r1.keyBy(_/20)
+r13: org.apache.spark.rdd.RDD[(Int, Int)] = MapPartitionsRDD[6] at keyBy at <con
+sole>:26
+
+scala> r13.collect
+res5: Array[(Int, Int)] = Array((0,0), (0,10), (1,20), (1,30), (2,40), (2,50), (
+3,60), (3,70), (4,80), (4,90))
+
+scala> val r14=Seq(r11,r12,r13).fold
+fold   foldLeft   foldRight
+
+scala> val r14=Seq(r11,r12,r13).fold
+
+def fold[A1 >: org.apache.spark.rdd.RDD[(Int, Int)]](z: A1)(op: (A1, A1) => A1):
+ A1
+
+scala> val r14=Seq(r11,r12,r13).foldLeft
+   def foldLeft[B](z: B)(op: (B, org.apache.spark.rdd.RDD[(Int, Int)]) => B): B
+
+scala> val r14=Seq(r11,r12,r13).foldLeft(r10)(_union)
+<console>:38: error: not found: value _union
+       val r14=Seq(r11,r12,r13).foldLeft(r10)(_union)
+                                              ^
+
+scala> val r14=Seq(r11,r12,r13).foldLeft(r10)
+<console>:38: error: missing argument list for method foldLeft in trait Traversa
+bleOnce
+Unapplied methods are only converted to functions when a function type is expect
+ed.
+You can make this conversion explicit by writing `foldLeft _` or `foldLeft(_)(_)
+` instead of `foldLeft`.
+       val r14=Seq(r11,r12,r13).foldLeft(r10)
+                                        ^
+
+scala> val r14=Seq(r11,r12,r13).foldLeft(r10)(union)
+<console>:38: error: not found: value union
+       val r14=Seq(r11,r12,r13).foldLeft(r10)(union)
+                                              ^
+
+scala> val r14=Seq(r11,r12,r13).foldLeft(r10)(_)
+r14: ((org.apache.spark.rdd.RDD[(Int, Int)], org.apache.spark.rdd.RDD[(Int, Int)
+]) => org.apache.spark.rdd.RDD[(Int, Int)]) => org.apache.spark.rdd.RDD[(Int, In
+t)] = <function1>
+
+scala> r14.collect.foreach(println)
+<console>:41: error: value collect is not a member of ((org.apache.spark.rdd.RDD
+[(Int, Int)], org.apache.spark.rdd.RDD[(Int, Int)]) => org.apache.spark.rdd.RDD[
+(Int, Int)]) => org.apache.spark.rdd.RDD[(Int, Int)]
+       r14.collect.foreach(println)
+           ^
+
+scala> r14.
+andThen   apply   compose   toString
+
+scala> r14.
+!=   ==             compose    formatted      ne             toString
+##   andThen        ensuring   getClass       notify         wait
++    apply          eq         hashCode       notifyAll      ?
+->   asInstanceOf   equals     isInstanceOf   synchronized
+
+scala> r14.toString
+res7: String = <function1>
+
+scala> r14.apply
+
+def apply(v1: (org.apache.spark.rdd.RDD[(Int, Int)], org.apache.spark.rdd.RDD[(I
+nt, Int)]) => org.apache.spark.rdd.RDD[(Int, Int)]): org.apache.spark.rdd.RDD[(I
+nt, Int)]
+
+scala> r14.apply((a1,a2)=>a1*a2)
+<console>:41: error: value * is not a member of org.apache.spark.rdd.RDD[(Int, I
+nt)]
+       r14.apply((a1,a2)=>a1*a2)
+                            ^
+
+scala> r14.apply((a1,a2)=>a1* a2)
+<console>:41: error: value * is not a member of org.apache.spark.rdd.RDD[(Int, I
+nt)]
+       r14.apply((a1,a2)=>a1* a2)
+                            ^
+
+scala> r14.apply((a1,a2)=>a1)
+res10: org.apache.spark.rdd.RDD[(Int, Int)] = CartesianRDD[3] at cartesian at <c
+onsole>:30
+
+scala> val r15=r14.apply((a1,a2)=>a1)
+r15: org.apache.spark.rdd.RDD[(Int, Int)] = CartesianRDD[3] at cartesian at <con
+sole>:30
+
+scala> r15.collect
+res11: Array[(Int, Int)] = Array((0,0), (0,10), (1,0), (1,10), (0,20), (0,30), (
+0,40), (1,20), (1,30), (1,40), (0,50), (0,60), (1,50), (1,60), (0,70), (0,80), (
+0,90), (1,70), (1,80), (1,90), (2,0), (2,10), (3,0), (3,10), (4,0), (4,10), (2,2
+0), (2,30), (2,40), (3,20), (3,30), (3,40), (4,20), (4,30), (4,40), (2,50), (2,6
+0), (3,50), (3,60), (4,50), (4,60), (2,70), (2,80), (2,90), (3,70), (3,80), (3,9
+0), (4,70), (4,80), (4,90), (5,0), (5,10), (6,0), (6,10), (5,20), (5,30), (5,40)
+, (6,20), (6,30), (6,40), (5,50), (5,60), (6,50), (6,60), (5,70), (5,80), (5,90)
+, (6,70), (6,80), (6,90), (7,0), (7,10), (8,0), (8,10), (9,0), (9,10), (7,20), (
+7,30), (7,40), (8,20), (8,30), (8,40), (9,20), (9,30), (9,40), (7,50), (7,60), (
+8,50), (8,60), (9,50), (9,60), (7,70), (7,80), (7,90), (8,70), (8,80), (8,90)...
+
+scala>
