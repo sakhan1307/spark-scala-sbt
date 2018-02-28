@@ -17,3 +17,323 @@ scala> import spark.sql
 import spark.sql
 
 scala> sql("select * from people2")
+
+---------------------------------------------------------------
+connect to HIVE via spark sql context
+
+[root@localhost ~]# cd SAIWS/BATCHES/BATCH181217/
+[root@localhost BATCH181217]# ls
+Datasets  JobJars  Output
+[root@localhost BATCH181217]# mkdir HIVE
+[root@localhost BATCH181217]# spark-shell --master local --deploy-mode client --verbose
+
+scala> import spark.implicits
+   object implicits
+
+scala> import spark.implicits._;
+import spark.implicits._
+
+scala> import spark.sql;
+import spark.sql
+
+scala> sql("show tables");
+res0: org.apache.spark.sql.DataFrame = [database: string, tableName: string ... 1 more field]
+
+scala> sql("show tables").show;
++--------+---------+-----------+
+|database|tableName|isTemporary|
++--------+---------+-----------+
++--------+---------+-----------+
+
+
+scala> sql("CREATE TABLE IF NOT EXISTS STUDENT(id INT, name STRING) ROW FORMAT DELIMITED FIELDS TERMINATED BY ','")
+18/02/24 13:04:35 WARN HiveMetaStore: Location: file:/home/trainings/SAIWS/BATCHES/BATCH181217/spark-warehousecified for non-external table:student
+res2: org.apache.spark.sql.DataFrame = []
+
+scala> sql("show tables").show;
++--------+---------+-----------+
+|database|tableName|isTemporary|
++--------+---------+-----------+
+| default|  student|      false|
++--------+---------+-----------+
+
+
+scala> sql("show create table student").show()
++--------------------+
+|      createtab_stmt|
++--------------------+
+|CREATE TABLE `stu...|
++--------------------+
+
+
+scala> sql("LOAD DATA LOCAL INPATH '/home/trainings/SAIWS/BATCHES/Datasets/HIVE/student' INTO TABLE student")
+
+scala> sql("LOAD DATA LOCAL INPATH '/home/trainings/SAIWS/BATCHES/Datasets/HIVE/student' INTO TABLE student")
+18/02/24 13:08:19 ERROR KeyProviderCache: Could not find uri with key [dfs.encryption.key.provider.uri] to crovider !!
+res5: org.apache.spark.sql.DataFrame = []
+
+scala> sql("select * from student").show()
+18/02/24 13:08:38 WARN LazyStruct: Extra bytes detected at the end of the row! Ignoring similar problems.
++----+--------+
+|  id|    name|
++----+--------+
+|   1| krishna|
+|   2|debashis|
+|   3|pranathi|
+|   4|  prasad|
+|   5|   krish|
+|   7|    teja|
+|null|     bbb|
++----+--------+
+
+
+scala> sql("select count(*) from student").show()
++--------+
+|count(1)|
++--------+
+|       7|
++--------+
+
+
+scala>
+
+scala> :q
+You have new mail in /var/spool/mail/root
+[root@localhost BATCH181217]#
+[root@localhost BATCH181217]# spark-shell
+^X^C[root@localhost BATCH181217]#
+[root@localhost BATCH181217]# spark-shell --master local --deploy-mode client --verbose
+
+[root@localhost BATCH181217]# spark-shell --master local --deploy-mode client --verbose
+
+scala>
+
+scala> spark
+spark   spark_partition_id
+
+scala> import spark
+spark   spark_partition_id
+
+scala> import spark.implicits._;
+import spark.implicits._
+
+scala> import spark.sql
+import spark.sql
+
+scala> sql("show tables").show()
++--------+---------+-----------+
+|database|tableName|isTemporary|
++--------+---------+-----------+
+| default|  student|      false|
++--------+---------+-----------+
+
+
+
+scala> sql("CREATE TABLE EMPLOYEE(name String, salary float, loc String) ROW FORMAT DELIMITED FIELDS TERMINATED BY ','");
+18/02/24 15:07:41 WARN HiveMetaStore: Location: file:/home/trainings/SAIWS/BATCHES/BATCH181217/spark-warehouse/employee specified for non-external table:employee
+res1: org.apache.spark.sql.DataFrame = []
+
+scala> sql("show tables");
+
+scala> sql("show tables");
+res2: org.apache.spark.sql.DataFrame = [database: string, tableName: string ... 1 more field]
+
+scala> sql("show tables").show();
++--------+---------+-----------+
+|database|tableName|isTemporary|
++--------+---------+-----------+
+| default| employee|      false|
+| default|  student|      false|
++--------+---------+-----------+
+
+
+scala> sql("describe employee)
+<console>:1: error: unclosed string literal
+sql("describe employee)
+    ^
+
+scala> sql("describe employee")
+res4: org.apache.spark.sql.DataFrame = [col_name: string, data_type: string ... 1 more field]
+
+scala> val des = sql("describe employee")
+des: org.apache.spark.sql.DataFrame = [col_name: string, data_type: string ... 1 more field]
+
+scala> des.printSchema
+root
+ |-- col_name: string (nullable = false)
+ |-- data_type: string (nullable = false)
+ |-- comment: string (nullable = true)
+
+
+scala> des.show()
+
+scala> des.show()
++--------+---------+-------+
+|col_name|data_type|comment|
++--------+---------+-------+
+|    name|   string|   null|
+|  salary|    float|   null|
+|     loc|   string|   null|
++--------+---------+-------+
+
+
+scala> sql("drop table employee")
+res7: org.apache.spark.sql.DataFrame = []
+
+scala> sql("drop table employee").show
+18/02/24 15:09:58 WARN DropTableCommand: org.apache.spark.sql.catalyst.analysis.NoSuchTableException: Table or view 'employee' not found in database 'default';
+org.apache.spark.sql.catalyst.analysis.NoSuchTableException: Table or view 'employee' not found in database 'default';
+
+scala>
+
+scala> sql("show tables").show()
++--------+---------+-----------+
+|database|tableName|isTemporary|
++--------+---------+-----------+
+| default|  student|      false|
++--------+---------+-----------+
+
+
+scala> sql("CREATE TABLE EMPLOYEE(name String, salary float, loc String) ROW FORMAT DELIMITED FIELDS TERMINATED BY ','");
+18/02/24 15:10:20 WARN HiveMetaStore: Location: file:/home/trainings/SAIWS/BATCHES/BATCH181217/spark-warehouse/employee specified for non-external table:employee
+res10: org.apache.spark.sql.DataFrame = []
+
+scala>
+
+scala> sql("show tables").show()
++--------+---------+-----------+
+|database|tableName|isTemporary|
++--------+---------+-----------+
+| default| employee|      false|
+| default|  student|      false|
++--------+---------+-----------+
+
+
+scala> sql("LOAD DATA LOCAL INPATH '/home/trainings/SAIWS/BATCHES/Datasets/HIVE/emp.txt" INTO TABLE employee")
+<console>:1: error: ')' expected but string literal found.
+sql("LOAD DATA LOCAL INPATH '/home/trainings/SAIWS/BATCHES/Datasets/HIVE/emp.txt" INTO TABLE employee")
+                                                                                             ^
+<console>:1: error: unclosed string literal
+sql("LOAD DATA LOCAL INPATH '/home/trainings/SAIWS/BATCHES/Datasets/HIVE/emp.txt" INTO TABLE employee")
+                                                                                                      ^
+
+scala> sql("LOAD DATA LOCAL INPATH '/home/trainings/SAIWS/BATCHES/Datasets/HIVE/emp.txt' INTO TABLE employee")
+18/02/24 15:11:00 ERROR KeyProviderCache: Could not find uri with key [dfs.encryption.key.provider.uri] to create a keyProvider !!
+res12: org.apache.spark.sql.DataFrame = []
+
+scala> sql(select * from employee).show()
+<console>:28: error: not found: value select
+       sql(select * from employee).show()
+           ^
+<console>:28: error: not found: value from
+       sql(select * from employee).show()
+                    ^
+
+scala> sql("select * from employee").show()
+
+scala> sql("select * from employee").show()
++-------+--------+-----------+
+|   name|  salary|        loc|
++-------+--------+-----------+
+| swetha|250000.0|    Chennai|
+|anamika|200000.0|Kanyakumari|
+|  tarun|300000.0|      Pondi|
+|  anita|250000.0|      Selam|
++-------+--------+-----------+
+
+
+scala> spark.sql
+sql   sqlContext
+
+scala> spark.sqlContext.read
+read   readStream
+
+scala> spark.sqlContext.read
+   def read: org.apache.spark.sql.DataFrameReader
+
+scala> spark.sqlContext.read.j
+jdbc   json
+
+scala> spark.sqlContext.read.j
+jdbc   json
+
+scala>
+
+scala> sql("CREATE TABLE EMAIL(name STRING, email STRING) ROW FORMAT DELIMITED FIELDS TERMINATED BY ','")
+18/02/24 15:14:57 WARN HiveMetaStore: Location: file:/home/trainings/SAIWS/BATCHES/BATCH181217/spark-warehouse/email specified for non-external table:email
+res15: org.apache.spark.sql.DataFrame = []
+
+scala> sql("LOAD DATA LOCAL INPATH '/home/trainings/SAIWS/BATCHES/Datasets/HIVE/email.txt' INTO TABLE email")
+res16: org.apache.spark.sql.DataFrame = []
+
+scala> sql("show tables")
+res17: org.apache.spark.sql.DataFrame = [database: string, tableName: string ... 1 more field]
+
+scala> sql("show tables").show()
++--------+---------+-----------+
+|database|tableName|isTemporary|
++--------+---------+-----------+
+| default|    email|      false|
+| default| employee|      false|
+| default|  student|      false|
++--------+---------+-----------+
+
+
+scala> sql("describe employee").show()
++--------+---------+-------+
+|col_name|data_type|comment|
++--------+---------+-------+
+|    name|   string|   null|
+|  salary|    float|   null|
+|     loc|   string|   null|
++--------+---------+-------+
+
+
+scala> sql("describe email").show()
++--------+---------+-------+
+|col_name|data_type|comment|
++--------+---------+-------+
+|    name|   string|   null|
+|   email|   string|   null|
++--------+---------+-------+
+
+
+scala> val jDF = sql("select e.name,e.salary,e.loc,m.email from employee e JOIN EMAIL m ON e.name=m.name")
+jDF: org.apache.spark.sql.DataFrame = [name: string, salary: float ... 2 more fields]
+
+scala> jDF.printSchema
+
+scala> jDF.printSchema
+root
+ |-- name: string (nullable = true)
+ |-- salary: float (nullable = true)
+ |-- loc: string (nullable = true)
+ |-- email: string (nullable = true)
+
+
+scala> jDF.show()
++------+--------+-------+----------------+
+|  name|  salary|    loc|           email|
++------+--------+-------+----------------+
+|swetha|250000.0|Chennai|swetha@gmail.com|
+| tarun|300000.0|  Pondi|tarun@edureka.in|
++------+--------+-------+----------------+
+
+
+scala>
+
+scala> val jDF = sql("select e.name,e.salary,e.loc,m.email from employee e LEFT OUTER JOIN EMAIL m ON e.name=m.name")
+jDF: org.apache.spark.sql.DataFrame = [name: string, salary: float ... 2 more fields]
+
+scala> jDF.show()
++-------+--------+-----------+----------------+
+|   name|  salary|        loc|           email|
++-------+--------+-----------+----------------+
+| swetha|250000.0|    Chennai|swetha@gmail.com|
+|anamika|200000.0|Kanyakumari|            null|
+|  tarun|300000.0|      Pondi|tarun@edureka.in|
+|  anita|250000.0|      Selam|            null|
++-------+--------+-----------+----------------+
+
+
+scala>

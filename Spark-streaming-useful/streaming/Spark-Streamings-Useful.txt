@@ -1,0 +1,4 @@
+
+ 
+ 
+  spark-submit --verbose --master local --deploy-mode client --conf spark.driver.extraClassPath=/home/edureka/SAIWS/BATCHES/mysql-connector-java-5.1.45-bin.jar:/usr/lib/kafka_2.12-0.11.0.0/libs/kafka-clients-0.11.0.0.jar --repositories https://repo.maven.apache.org/maven2 --packages org.apache.spark:spark-streaming-kafka-0-10_2.11:2.0.0 --class com.laboros.spark.sql.SparkStreamingConsumer sparksqldemo_2.11-1.0.jar kafka_topic

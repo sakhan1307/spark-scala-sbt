@@ -1,0 +1,271 @@
+hadoopjars  Jobjars  sparkjobs  WordCount.txt
+[edureka@localhost BATCH170917]$ cd sparkjobs/
+[edureka@localhost sparkjobs]$ ls
+Datasets  my-spark.properties  sparkdemo_2.11-0.1.0-SNAPSHOT.jar  spark-warehouse  sql-datasets
+[edureka@localhost sparkjobs]$ ls
+Datasets  my-spark.properties  sparkdemo_2.11-0.1.0-SNAPSHOT.jar  spark-warehouse  sql-datasets
+---start spark shell
+[edureka@localhost sparkjobs]$ spark-shell --master local --deploy-mode client --verbose
+
+scala> import spark.implicits._
+import spark.implicits._
+
+scala> import spark.sql
+import spark.sql
+
+scala> sql("show tables")
+res0: org.apache.spark.sql.DataFrame = [database: string, tableName: string ... 1 more field]
+
+scala> sql("show tables").show
+                                                 def show(numRows: Int): Unit                 def show(): Unit                    
+def show(numRows: Int,truncate: Boolean): Unit   def show(numRows: Int,truncate: Int): Unit   def show(truncate: Boolean): Unit   
+
+scala> sql("show tables").show
+                               def show(truncate: Boolean): Unit   def show(numRows: Int,truncate: Int): Unit       
+def show(numRows: Int): Unit   def show(): Unit                    def show(numRows: Int,truncate: Boolean): Unit   
+
+scala> sql("show tables").show
++--------+---------+-----------+
+|database|tableName|isTemporary|
++--------+---------+-----------+
++--------+---------+-----------+
+
+
+scala> sql("CREATE TABLE IF NOT EXISTS STUDENT(id INT, name STRING) ROW FORMAT DELIMITED FIELDS TERMINATED BY ','")
+18/02/25 11:15:34 WARN HiveMetaStore: Location: file:/home/edureka/SHAHBAZWS/BATCH170917/sparkjobs/spark-warehouse/student specified for non-external table:student
+res2: org.apache.spark.sql.DataFrame = []
+
+scala> sql("show tables").show
++--------+---------+-----------+
+|database|tableName|isTemporary|
++--------+---------+-----------+
+| default|  student|      false|
++--------+---------+-----------+
+
+
+scala> sql("show create table student").show()
++--------------------+
+|      createtab_stmt|
++--------------------+
+|CREATE TABLE `stu...|
++--------------------+
+
+
+scala> sql("LOAD DATA LOCAL INPATH '/home/edureka/SHAHBAZWS/BATCH170917/sparkjobs/sql-datasets/hive/student.txt' INTO TABLE student")
+18/02/25 11:18:17 ERROR KeyProviderCache: Could not find uri with key [dfs.encryption.key.provider.uri] to create a keyProvider !!
+res5: org.apache.spark.sql.DataFrame = []
+
+scala> sql("select * from student").show()
+18/02/25 11:19:06 WARN LazyStruct: Extra bytes detected at the end of the row! Ignoring similar problems.
++----+--------+
+|  id|    name|
++----+--------+
+|   1| krishna|
+|   2|debashis|
+|   3|pranathi|
+|   4|  prasad|
+|   5|   krish|
+|   7|    teja|
+|null|     bbb|
++----+--------+
+
+
+scala> sql("select count(*) from student").show()
++--------+
+|count(1)|
++--------+
+|       7|
++--------+
+
+
+scala> sql("LOAD DATA LOCAL INPATH '/home/edureka/SHAHBAZWS/BATCH170917/sparkjobs/sql-datasets/hive/student.txt' INTO TABLE student")
+res8: org.apache.spark.sql.DataFrame = []
+
+scala> sql("select * from student").show()
+18/02/25 11:20:52 WARN LazyStruct: Extra bytes detected at the end of the row! Ignoring similar problems.
+18/02/25 11:20:52 WARN LazyStruct: Extra bytes detected at the end of the row! Ignoring similar problems.
++----+--------+
+|  id|    name|
++----+--------+
+|   1| krishna|
+|   2|debashis|
+|   3|pranathi|
+|   4|  prasad|
+|   5|   krish|
+|   7|    teja|
+|null|     bbb|
+|   1| krishna|
+|   2|debashis|
+|   3|pranathi|
+|   4|  prasad|
+|   5|   krish|
+|   7|    teja|
+|null|     bbb|
++----+--------+
+
+
+scala> sql("truncate table student").show()
+++
+||
+++
+++
+
+
+scala> sql("select * from student").show()
++---+----+
+| id|name|
++---+----+
++---+----+
+
+
+scala> sql("LOAD DATA LOCAL INPATH '/home/edureka/SHAHBAZWS/BATCH170917/sparkjobs/sql-datasets/hive/student.txt' INTO TABLE student")
+res13: org.apache.spark.sql.DataFrame = []
+
+scala> sql("select * from student").show()
+18/02/25 11:21:55 WARN LazyStruct: Extra bytes detected at the end of the row! Ignoring similar problems.
++----+--------+
+|  id|    name|
++----+--------+
+|   1| krishna|
+|   2|debashis|
+|   3|pranathi|
+|   4|  prasad|
+|   5|   krish|
+|   7|    teja|
+|null|     bbb|
++----+--------+
+
+
+scala> sql("CREATE TABLE EMPLOYEE(name String, salary float, loc String) ROW FORMAT DELIMITED FIELDS TERMINATED BY ','")
+18/02/25 11:22:43 WARN HiveMetaStore: Location: file:/home/edureka/SHAHBAZWS/BATCH170917/sparkjobs/spark-warehouse/employee specified for non-external table:employee
+res15: org.apache.spark.sql.DataFrame = []
+
+scala> sql("show tables").show
++--------+---------+-----------+
+|database|tableName|isTemporary|
++--------+---------+-----------+
+| default| employee|      false|
+| default|  student|      false|
++--------+---------+-----------+
+
+
+scala> val des = sql("describe employee")
+des: org.apache.spark.sql.DataFrame = [col_name: string, data_type: string ... 1 more field]
+
+scala> des.show
++--------+---------+-------+
+|col_name|data_type|comment|
++--------+---------+-------+
+|    name|   string|   null|
+|  salary|    float|   null|
+|     loc|   string|   null|
++--------+---------+-------+
+
+
+scala> des.printSchema
+root
+ |-- col_name: string (nullable = false)
+ |-- data_type: string (nullable = false)
+ |-- comment: string (nullable = true)
+
+
+scala> sql("drop table employee")
+res19: org.apache.spark.sql.DataFrame = []
+
+scala> sql("show tables").show
++--------+---------+-----------+
+|database|tableName|isTemporary|
++--------+---------+-----------+
+| default|  student|      false|
++--------+---------+-----------+
+
+
+scala> sql("CREATE TABLE EMPLOYEE(name String, salary float, loc String) ROW FORMAT DELIMITED FIELDS TERMINATED BY ','")
+18/02/25 11:26:47 WARN HiveMetaStore: Location: file:/home/edureka/SHAHBAZWS/BATCH170917/sparkjobs/spark-warehouse/employee specified for non-external table:employee
+res21: org.apache.spark.sql.DataFrame = []
+
+scala> sql("show tables").show
++--------+---------+-----------+
+|database|tableName|isTemporary|
++--------+---------+-----------+
+| default| employee|      false|
+| default|  student|      false|
++--------+---------+-----------+
+
+
+scala> sql("LOAD DATA LOCAL INPATH '/home/edureka/SHAHBAZWS/BATCH170917/sparkjobs/sql-datasets/hive/emp.txt' INTO TABLE employee")
+res23: org.apache.spark.sql.DataFrame = []
+
+scala> sql("select * from employee").show
++-------+--------+-----------+
+|   name|  salary|        loc|
++-------+--------+-----------+
+| swetha|250000.0|    Chennai|
+|anamika|200000.0|Kanyakumari|
+|  tarun|300000.0|      Pondi|
+|  anita|250000.0|      Selam|
++-------+--------+-----------+
+
+
+scala> sql("CREATE TABLE EMAIL(name STRING, email STRING) ROW FORMAT DELIMITED FIELDS TERMINATED BY ','")
+18/02/25 11:32:34 WARN HiveMetaStore: Location: file:/home/edureka/SHAHBAZWS/BATCH170917/sparkjobs/spark-warehouse/email specified for non-external table:email
+res25: org.apache.spark.sql.DataFrame = []
+
+scala> sql("show tables").show
++--------+---------+-----------+
+|database|tableName|isTemporary|
++--------+---------+-----------+
+| default|    email|      false|
+| default| employee|      false|
+| default|  student|      false|
++--------+---------+-----------+
+
+
+scala> sql("select * from email").show
++----+-----+
+|name|email|
++----+-----+
++----+-----+
+
+
+scala> sql("LOAD DATA LOCAL INPATH '/home/edureka/SHAHBAZWS/BATCH170917/sparkjobs/sql-datasets/hive/email.txt' INTO TABLE email")
+res28: org.apache.spark.sql.DataFrame = []
+
+scala> sql("select * from email").show
++---------+----------------+
+|     name|           email|
++---------+----------------+
+|   swetha|swetha@gmail.com|
+|    tarun|tarun@edureka.in|
+|   nagesh|nagesh@yahoo.com|
+|venkatesh| venki@gmail.com|
++---------+----------------+
+
+
+scala> val jDF = sql("select e.name,e.salary,e.loc,m.email from employee e JOIN EMAIL m ON e.name=m.name")
+jDF: org.apache.spark.sql.DataFrame = [name: string, salary: float ... 2 more fields]
+
+scala> jDF.show()
++------+--------+-------+----------------+
+|  name|  salary|    loc|           email|
++------+--------+-------+----------------+
+|swetha|250000.0|Chennai|swetha@gmail.com|
+| tarun|300000.0|  Pondi|tarun@edureka.in|
++------+--------+-------+----------------+
+
+
+scala> val jDF = sql("select e.name,e.salary,e.loc,m.email from employee e LEFT OUTER JOIN EMAIL m ON e.name=m.name")
+jDF: org.apache.spark.sql.DataFrame = [name: string, salary: float ... 2 more fields]
+
+scala> jDF.show()
++-------+--------+-----------+----------------+
+|   name|  salary|        loc|           email|
++-------+--------+-----------+----------------+
+| swetha|250000.0|    Chennai|swetha@gmail.com|
+|anamika|200000.0|Kanyakumari|            null|
+|  tarun|300000.0|      Pondi|tarun@edureka.in|
+|  anita|250000.0|      Selam|            null|
++-------+--------+-----------+----------------+
+
+
+scala> 

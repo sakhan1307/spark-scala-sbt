@@ -1,0 +1,35 @@
+
+ cd /usr/lib/kafka_2.12-0.11.0.0
+ 
+ --Open indiviual terminal for zookeeper, kafka, producer, consumer
+ 
+ bin/zookeeper-server-start.sh config/zookeeper.properties
+ 
+ bin/kafka-server-start.sh config/server.properties
+ 
+ -- create topic 
+ bin/kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic kafka_topic
+ 
+ 
+ --list the topics
+ 
+  bin/kafka-topics.sh --zookeeper localhost:2181 --list
+  
+  
+ Console producer 
+ 
+  bin/kafka-console-producer.sh --broker-list localhost:9092 --topic kafka_topic
+  
+ Console Consumer
+ 
+  bin/kafka-console-consumer.sh --zookeeper localhost:2181 --topic kafka_topic --from-beginning
+  
+--DELETE TOPIC
+  
+  bin/kafka-topics.sh --zookeeper localhost:2181 --delete --topic kafka_topic
+  
+  -- stop kafka
+  bin/kafka-server-stop.sh config/server.properties
+  
+-- stop zookeeper
+bin/zookeeper-server-start.sh config/zookeeper.properties
