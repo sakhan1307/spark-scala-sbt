@@ -32,4 +32,4 @@
   bin/kafka-server-stop.sh config/server.properties
   
 -- stop zookeeper
-bin/zookeeper-server-start.sh config/zookeeper.properties
+bin/zookeeper-server-stop.sh config/zookeeper.properties

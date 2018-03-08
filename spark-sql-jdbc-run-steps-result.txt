@@ -1,0 +1,540 @@
+
+----my sql on edureka vm
+
+ps -ef | grep mysql
+
+if want to restart-
+
+sudo service mysqld restart
+mysql -u root -p    (NOTE: it's a small p)
+
+[edureka@localhost ~]$ ps -ef | grep mysql
+mysql     2366     1  0 09:50 ?        00:00:00 /usr/sbin/mysqld --daemonize --pid-file=/var/run/mysqld/mysqld.pid
+edureka   4970  4638  0 10:10 pts/0    00:00:00 grep --color=auto mysql
+[edureka@localhost ~]$ mysql --user=root --password=Edurekasql_123
+
+http://g2pc1.bu.edu/~qzpeng/manual/MySQL%20Commands.htm
+
+mysql> help
+
+mysql> SHOW DATABASES;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| mydb               |
+| mysql              |
+| performance_schema |
+| sys                |
++--------------------+
+5 rows in set (0.12 sec)
+
+mysql> connect mydb
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Connection id:    4
+Current database: mydb
+
+mysql> select DATABASE();
++------------+
+| DATABASE() |
++------------+
+| mydb       |
++------------+
+1 row in set (0.00 sec)
+
+mysql> SHOW TABLES;
++----------------+
+| Tables_in_mydb |
++----------------+
+| election_part  |
+| elections      |
+| us_elections   |
++----------------+
+3 rows in set (0.00 sec)
+
+mysql> describe elections;
+mysql> select fips, Households from elections LIMIT 10;
+
+SELECT col1, col2, col3 FROM table LIMIT 10 OFFSET 10; // to get rows 11 to 20
+
+mysql> exit
+Bye
+
+$ spark-submit --verbose --master local --deploy-mode client --conf spark.driver.extraClassPath=/home/edureka/SHAHBAZWS/BATCH170917/sparkjobs/mysql-connector-java-5.1.43-bin.jar --class com.laboros.spark.sql.stream.SparkSqlJDBC sparkdemo_2.11-0.1.0-SNAPSHOT.jar
+OR instead of --conf spark.driver.extraClassPath, you can use --jars as well
+$ spark-submit --verbose --master local --deploy-mode client --jars /home/edureka/SHAHBAZWS/BATCH170917/sparkjobs/mysql-connector-java-5.1.43-bin.jar --class com.laboros.spark.sql.stream.SparkSqlJDBC sparkdemo_2.11-0.1.0-SNAPSHOT.jar
+----
+
+
+[edureka@localhost ~]$ spark-submit --verbose --master local --deploy-mode client --conf spark.driver.extraClassPath=/home/edureka/SHAHBAZWS/BATCH170917/sparkjobs/mysql-connector-java-5.1.43-bin.jar --class com.laboros.spark.sql.stream.SparkSqlJDBC sparkdemo_2.11-0.1.0-SNAPSHOT.jar^C
+[edureka@localhost ~]$ pwd
+/home/edureka
+[edureka@localhost ~]$ cd SHAHBAZWS/BATCH170917/sparkjobs/
+[edureka@localhost sparkjobs]$ ls
+Datasets   metastore_db         mysql-connector-java-5.1.43-bin.jar  spark-warehouse
+derby.log  my-spark.properties  sparkdemo_2.11-0.1.0-SNAPSHOT.jar    sql-datasets
+[edureka@localhost sparkjobs]$ spark-submit --verbose --master local --deploy-mode client --conf spark.driver.extraClassPath=/home/edureka/SHAHBAZWS/BATCH170917/sparkjobs/mysql-connector-java-5.1.43-bin.jar --class com.laboros.spark.sql.stream.SparkSqlJDBC sparkdemo_2.11-0.1.0-SNAPSHOT.jar
+Using properties file: /usr/lib/spark-2.1.1-bin-hadoop2.7/conf/spark-defaults.conf
+Adding default property: spark.master=spark://localhost:7077
+Parsed arguments:
+  master                  local
+  deployMode              client
+  executorMemory          null
+  executorCores           null
+  totalExecutorCores      null
+  propertiesFile          /usr/lib/spark-2.1.1-bin-hadoop2.7/conf/spark-defaults.conf
+  driverMemory            null
+  driverCores             null
+  driverExtraClassPath    /home/edureka/SHAHBAZWS/BATCH170917/sparkjobs/mysql-connector-java-5.1.43-bin.jar
+  driverExtraLibraryPath  null
+  driverExtraJavaOptions  null
+  supervise               false
+  queue                   null
+  numExecutors            null
+  files                   null
+  pyFiles                 null
+  archives                null
+  mainClass               com.laboros.spark.sql.stream.SparkSqlJDBC
+  primaryResource         file:/home/edureka/SHAHBAZWS/BATCH170917/sparkjobs/sparkdemo_2.11-0.1.0-SNAPSHOT.jar
+  name                    com.laboros.spark.sql.stream.SparkSqlJDBC
+  childArgs               []
+  jars                    null
+  packages                null
+  packagesExclusions      null
+  repositories            null
+  verbose                 true
+
+Spark properties used, including those specified through
+ --conf and those from the properties file /usr/lib/spark-2.1.1-bin-hadoop2.7/conf/spark-defaults.conf:
+  spark.master -> spark://localhost:7077
+  spark.driver.extraClassPath -> /home/edureka/SHAHBAZWS/BATCH170917/sparkjobs/mysql-connector-java-5.1.43-bin.jar
+
+    
+Main class:
+com.laboros.spark.sql.stream.SparkSqlJDBC
+Arguments:
+
+System properties:
+SPARK_SUBMIT -> true
+spark.app.name -> com.laboros.spark.sql.stream.SparkSqlJDBC
+spark.jars -> file:/home/edureka/SHAHBAZWS/BATCH170917/sparkjobs/sparkdemo_2.11-0.1.0-SNAPSHOT.jar
+spark.submit.deployMode -> client
+spark.master -> local
+spark.driver.extraClassPath -> /home/edureka/SHAHBAZWS/BATCH170917/sparkjobs/mysql-connector-java-5.1.43-bin.jar
+Classpath elements:
+file:/home/edureka/SHAHBAZWS/BATCH170917/sparkjobs/sparkdemo_2.11-0.1.0-SNAPSHOT.jar
+
+
+18/02/28 10:36:55 INFO SparkContext: Running Spark version 2.1.1
+18/02/28 10:36:56 WARN NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+18/02/28 10:36:56 WARN Utils: Your hostname, localhost.localdomain resolves to a loopback address: 127.0.0.1; using 10.0.2.15 instead (on interface enp0s3)
+18/02/28 10:36:56 WARN Utils: Set SPARK_LOCAL_IP if you need to bind to another address
+18/02/28 10:36:56 INFO SecurityManager: Changing view acls to: edureka
+18/02/28 10:36:56 INFO SecurityManager: Changing modify acls to: edureka
+18/02/28 10:36:56 INFO SecurityManager: Changing view acls groups to: 
+18/02/28 10:36:56 INFO SecurityManager: Changing modify acls groups to: 
+18/02/28 10:36:56 INFO SecurityManager: SecurityManager: authentication disabled; ui acls disabled; users  with view permissions: Set(edureka); groups with view permissions: Set(); users  with modify permissions: Set(edureka); groups with modify permissions: Set()
+18/02/28 10:36:57 INFO Utils: Successfully started service 'sparkDriver' on port 42930.
+18/02/28 10:36:57 INFO SparkEnv: Registering MapOutputTracker
+18/02/28 10:36:57 INFO SparkEnv: Registering BlockManagerMaster
+18/02/28 10:36:57 INFO BlockManagerMasterEndpoint: Using org.apache.spark.storage.DefaultTopologyMapper for getting topology information
+18/02/28 10:36:57 INFO BlockManagerMasterEndpoint: BlockManagerMasterEndpoint up
+18/02/28 10:36:57 INFO DiskBlockManager: Created local directory at /tmp/blockmgr-b87f7100-0a91-4c9f-829c-2759da75afd4
+18/02/28 10:36:57 INFO MemoryStore: MemoryStore started with capacity 366.3 MB
+18/02/28 10:36:57 INFO SparkEnv: Registering OutputCommitCoordinator
+18/02/28 10:36:58 INFO Utils: Successfully started service 'SparkUI' on port 4040.
+18/02/28 10:36:58 INFO SparkUI: Bound SparkUI to 0.0.0.0, and started at http://10.0.2.15:4040
+18/02/28 10:36:58 INFO SparkContext: Added JAR file:/home/edureka/SHAHBAZWS/BATCH170917/sparkjobs/sparkdemo_2.11-0.1.0-SNAPSHOT.jar at spark://10.0.2.15:42930/jars/sparkdemo_2.11-0.1.0-SNAPSHOT.jar with timestamp 1519794418114
+18/02/28 10:36:58 INFO Executor: Starting executor ID driver on host localhost
+18/02/28 10:36:58 INFO Utils: Successfully started service 'org.apache.spark.network.netty.NettyBlockTransferService' on port 36694.
+18/02/28 10:36:58 INFO NettyBlockTransferService: Server created on 10.0.2.15:36694
+18/02/28 10:36:58 INFO BlockManager: Using org.apache.spark.storage.RandomBlockReplicationPolicy for block replication policy
+18/02/28 10:36:58 INFO BlockManagerMaster: Registering BlockManager BlockManagerId(driver, 10.0.2.15, 36694, None)
+18/02/28 10:36:58 INFO BlockManagerMasterEndpoint: Registering block manager 10.0.2.15:36694 with 366.3 MB RAM, BlockManagerId(driver, 10.0.2.15, 36694, None)
+18/02/28 10:36:58 INFO BlockManagerMaster: Registered BlockManager BlockManagerId(driver, 10.0.2.15, 36694, None)
+18/02/28 10:36:58 INFO BlockManager: Initialized BlockManager: BlockManagerId(driver, 10.0.2.15, 36694, None)
+18/02/28 10:36:59 INFO SharedState: Warehouse path is 'file:/home/edureka/SHAHBAZWS/BATCH170917/sparkjobs/spark-warehouse/'.
+Wed Feb 28 10:37:00 IST 2018 WARN: Establishing SSL connection without server's identity verification is not recommended. According to MySQL 5.5.45+, 5.6.26+ and 5.7.6+ requirements SSL connection must be established by default if explicit option isn't set. For compliance with existing applications not using SSL the verifyServerCertificate property is set to 'false'. You need either to explicitly disable SSL by setting useSSL=false, or set useSSL=true and provide truststore for server certificate verification.
+root
+ |-- fips: string (nullable = false)
+ |-- area_name: string (nullable = true)
+ |-- state_abbreviation: string (nullable = true)
+ |-- Population_2014: integer (nullable = true)
+ |-- Population_2010_Apr1: integer (nullable = true)
+ |-- Change_in_Population_percent: double (nullable = true)
+ |-- Population_2010: integer (nullable = true)
+ |-- Persons_under_5: double (nullable = true)
+ |-- Persons_under_18: double (nullable = true)
+ |-- Persons_65_years_over: double (nullable = true)
+ |-- Female_persons_percent: double (nullable = true)
+ |-- White_alone: double (nullable = true)
+ |-- Black_or_African_American_alone: double (nullable = true)
+ |-- American_Indian_and_Alaska_Native_alone: double (nullable = true)
+ |-- Asian_alone: double (nullable = true)
+ |-- Native_Hawaiian_and_Other_Pacific_Islander_alone: double (nullable = true)
+ |-- Two_or_More_Races: double (nullable = true)
+ |-- Hispanic_or_Latino: double (nullable = true)
+ |-- White_alone_not_Hispanic_or_Latino: double (nullable = true)
+ |-- Living_in_same_house_1_year_over: double (nullable = true)
+ |-- Foreign_born_persons: double (nullable = true)
+ |-- Language_other_than_English_spoken_at_home: double (nullable = true)
+ |-- High_school_graduate_or_higher: double (nullable = true)
+ |-- Bachelor_degree_or_higher: double (nullable = true)
+ |-- Veterans: integer (nullable = true)
+ |-- Mean_travel_time_to_work: double (nullable = true)
+ |-- Housing_units: integer (nullable = true)
+ |-- Homeownership_rate: double (nullable = true)
+ |-- Housing_units_in_multi_unit_structures: double (nullable = true)
+ |-- Median_value_of_owner_occupied_housing_units: integer (nullable = true)
+ |-- Households: integer (nullable = true)
+ |-- Persons_per_household: double (nullable = true)
+ |-- Per_capita_money_income: integer (nullable = true)
+ |-- Median_household_income: integer (nullable = true)
+ |-- Persons_below_poverty_level: double (nullable = true)
+ |-- Private_nonfarm_establishments: integer (nullable = true)
+ |-- Private_nonfarm_employment: integer (nullable = true)
+ |-- Private_nonfarm_employment_percentage_change: double (nullable = true)
+ |-- Nonemployer_establishments: integer (nullable = true)
+ |-- Total_number_of_firms: integer (nullable = true)
+ |-- Black_owned_firms: double (nullable = true)
+ |-- American_Indian_and_Alaska_Native_owned_firms: double (nullable = true)
+ |-- Asian_owned_firms: double (nullable = true)
+ |-- Native_Hawaiian_and_Other_Pacific_Islander_owned_firms: double (nullable = true)
+ |-- Hispanic_owned_firms: double (nullable = true)
+ |-- Women_owned_firms: double (nullable = true)
+ |-- Manufacturers_shipments: double (nullable = true)
+ |-- Merchant_wholesaler_sales: double (nullable = true)
+ |-- Retail_sales: double (nullable = true)
+ |-- Retail_sales_per_capita: integer (nullable = true)
+ |-- Accommodation_and_food_services_sales: integer (nullable = true)
+ |-- Building_permits: integer (nullable = true)
+ |-- Land_area_in_square_miles: double (nullable = true)
+ |-- Population_per_square_mile: double (nullable = true)
+
+18/02/28 10:37:04 WARN Utils: Truncated the string representation of a plan since it was too large. This behavior can be adjusted by setting 'spark.debug.maxToStringFields' in SparkEnv.conf.
+18/02/28 10:37:05 INFO CodeGenerator: Code generated in 358.427996 ms
+18/02/28 10:37:05 INFO SparkContext: Starting job: show at SparkSqlJDBC.scala:30
+18/02/28 10:37:05 INFO DAGScheduler: Got job 0 (show at SparkSqlJDBC.scala:30) with 1 output partitions
+18/02/28 10:37:05 INFO DAGScheduler: Final stage: ResultStage 0 (show at SparkSqlJDBC.scala:30)
+18/02/28 10:37:05 INFO DAGScheduler: Parents of final stage: List()
+18/02/28 10:37:05 INFO DAGScheduler: Missing parents: List()
+18/02/28 10:37:05 INFO DAGScheduler: Submitting ResultStage 0 (MapPartitionsRDD[2] at show at SparkSqlJDBC.scala:30), which has no missing parents
+18/02/28 10:37:06 INFO MemoryStore: Block broadcast_0 stored as values in memory (estimated size 7.1 KB, free 366.3 MB)
+18/02/28 10:37:06 INFO MemoryStore: Block broadcast_0_piece0 stored as bytes in memory (estimated size 4.0 KB, free 366.3 MB)
+18/02/28 10:37:06 INFO BlockManagerInfo: Added broadcast_0_piece0 in memory on 10.0.2.15:36694 (size: 4.0 KB, free: 366.3 MB)
+18/02/28 10:37:06 INFO SparkContext: Created broadcast 0 from broadcast at DAGScheduler.scala:996
+18/02/28 10:37:06 INFO DAGScheduler: Submitting 1 missing tasks from ResultStage 0 (MapPartitionsRDD[2] at show at SparkSqlJDBC.scala:30)
+18/02/28 10:37:06 INFO TaskSchedulerImpl: Adding task set 0.0 with 1 tasks
+18/02/28 10:37:06 INFO TaskSetManager: Starting task 0.0 in stage 0.0 (TID 0, localhost, executor driver, partition 0, PROCESS_LOCAL, 5795 bytes)
+18/02/28 10:37:06 INFO Executor: Running task 0.0 in stage 0.0 (TID 0)
+18/02/28 10:37:06 INFO Executor: Fetching spark://10.0.2.15:42930/jars/sparkdemo_2.11-0.1.0-SNAPSHOT.jar with timestamp 1519794418114
+18/02/28 10:37:06 INFO TransportClientFactory: Successfully created connection to /10.0.2.15:42930 after 54 ms (0 ms spent in bootstraps)
+18/02/28 10:37:06 INFO Utils: Fetching spark://10.0.2.15:42930/jars/sparkdemo_2.11-0.1.0-SNAPSHOT.jar to /tmp/spark-61248224-6aa2-473d-b828-c9ee0c0fc644/userFiles-096c6547-14fc-40f7-85e2-2bd5b2c86c19/fetchFileTemp4382980093730598059.tmp
+18/02/28 10:37:06 INFO Executor: Adding file:/tmp/spark-61248224-6aa2-473d-b828-c9ee0c0fc644/userFiles-096c6547-14fc-40f7-85e2-2bd5b2c86c19/sparkdemo_2.11-0.1.0-SNAPSHOT.jar to class loader
+Wed Feb 28 10:37:06 IST 2018 WARN: Establishing SSL connection without server's identity verification is not recommended. According to MySQL 5.5.45+, 5.6.26+ and 5.7.6+ requirements SSL connection must be established by default if explicit option isn't set. For compliance with existing applications not using SSL the verifyServerCertificate property is set to 'false'. You need either to explicitly disable SSL by setting useSSL=false, or set useSSL=true and provide truststore for server certificate verification.
+18/02/28 10:37:07 INFO JDBCRDD: closed connection
+18/02/28 10:37:07 INFO Executor: Finished task 0.0 in stage 0.0 (TID 0). 1525 bytes result sent to driver
+18/02/28 10:37:07 INFO DAGScheduler: ResultStage 0 (show at SparkSqlJDBC.scala:30) finished in 0.997 s
+18/02/28 10:37:07 INFO DAGScheduler: Job 0 finished: show at SparkSqlJDBC.scala:30, took 1.433156 s
+18/02/28 10:37:07 INFO TaskSetManager: Finished task 0.0 in stage 0.0 (TID 0) in 961 ms on localhost (executor driver) (1/1)
+18/02/28 10:37:07 INFO TaskSchedulerImpl: Removed TaskSet 0.0, whose tasks have all completed, from pool 
+18/02/28 10:37:07 INFO CodeGenerator: Code generated in 65.795513 ms
++-----+----------+
+| fips|Households|
++-----+----------+
+|    0| 115610216|
+| 1000|   1838683|
+|10000|    335707|
+|10001|     58524|
+|10003|    200739|
+|10005|     76444|
+| 1001|     20071|
+| 1003|     73283|
+| 1005|      9200|
+| 1007|      7091|
++-----+----------+
+
+18/02/28 10:37:07 INFO SparkSqlParser: Parsing command: v_elections
+18/02/28 10:37:07 INFO SparkSqlParser: Parsing command: select fips, Households from v_elections
+18/02/28 10:37:08 INFO SparkContext: Starting job: show at SparkSqlJDBC.scala:34
+18/02/28 10:37:08 INFO DAGScheduler: Got job 1 (show at SparkSqlJDBC.scala:34) with 1 output partitions
+18/02/28 10:37:08 INFO DAGScheduler: Final stage: ResultStage 1 (show at SparkSqlJDBC.scala:34)
+18/02/28 10:37:08 INFO DAGScheduler: Parents of final stage: List()
+18/02/28 10:37:08 INFO DAGScheduler: Missing parents: List()
+18/02/28 10:37:08 INFO DAGScheduler: Submitting ResultStage 1 (MapPartitionsRDD[6] at show at SparkSqlJDBC.scala:34), which has no missing parents
+18/02/28 10:37:08 INFO MemoryStore: Block broadcast_1 stored as values in memory (estimated size 7.1 KB, free 366.3 MB)
+18/02/28 10:37:08 INFO MemoryStore: Block broadcast_1_piece0 stored as bytes in memory (estimated size 4.0 KB, free 366.3 MB)
+18/02/28 10:37:08 INFO BlockManagerInfo: Added broadcast_1_piece0 in memory on 10.0.2.15:36694 (size: 4.0 KB, free: 366.3 MB)
+18/02/28 10:37:08 INFO SparkContext: Created broadcast 1 from broadcast at DAGScheduler.scala:996
+18/02/28 10:37:08 INFO DAGScheduler: Submitting 1 missing tasks from ResultStage 1 (MapPartitionsRDD[6] at show at SparkSqlJDBC.scala:34)
+18/02/28 10:37:08 INFO TaskSchedulerImpl: Adding task set 1.0 with 1 tasks
+18/02/28 10:37:08 INFO TaskSetManager: Starting task 0.0 in stage 1.0 (TID 1, localhost, executor driver, partition 0, PROCESS_LOCAL, 5795 bytes)
+18/02/28 10:37:08 INFO Executor: Running task 0.0 in stage 1.0 (TID 1)
+Wed Feb 28 10:37:08 IST 2018 WARN: Establishing SSL connection without server's identity verification is not recommended. According to MySQL 5.5.45+, 5.6.26+ and 5.7.6+ requirements SSL connection must be established by default if explicit option isn't set. For compliance with existing applications not using SSL the verifyServerCertificate property is set to 'false'. You need either to explicitly disable SSL by setting useSSL=false, or set useSSL=true and provide truststore for server certificate verification.
+18/02/28 10:37:08 INFO JDBCRDD: closed connection
+18/02/28 10:37:08 INFO Executor: Finished task 0.0 in stage 1.0 (TID 1). 1525 bytes result sent to driver
+18/02/28 10:37:08 INFO TaskSetManager: Finished task 0.0 in stage 1.0 (TID 1) in 144 ms on localhost (executor driver) (1/1)
+18/02/28 10:37:08 INFO TaskSchedulerImpl: Removed TaskSet 1.0, whose tasks have all completed, from pool 
+18/02/28 10:37:08 INFO DAGScheduler: ResultStage 1 (show at SparkSqlJDBC.scala:34) finished in 0.146 s
+18/02/28 10:37:08 INFO DAGScheduler: Job 1 finished: show at SparkSqlJDBC.scala:34, took 0.189680 s
++-----+----------+
+| fips|Households|
++-----+----------+
+|    0| 115610216|
+| 1000|   1838683|
+|10000|    335707|
+|10001|     58524|
+|10003|    200739|
+|10005|     76444|
+| 1001|     20071|
+| 1003|     73283|
+| 1005|      9200|
+| 1007|      7091|
++-----+----------+
+
+18/02/28 10:37:08 INFO SparkContext: Invoking stop() from shutdown hook
+18/02/28 10:37:08 INFO SparkUI: Stopped Spark web UI at http://10.0.2.15:4040
+18/02/28 10:37:08 INFO MapOutputTrackerMasterEndpoint: MapOutputTrackerMasterEndpoint stopped!
+18/02/28 10:37:08 INFO MemoryStore: MemoryStore cleared
+18/02/28 10:37:08 INFO BlockManager: BlockManager stopped
+18/02/28 10:37:08 INFO BlockManagerMaster: BlockManagerMaster stopped
+18/02/28 10:37:08 INFO OutputCommitCoordinator$OutputCommitCoordinatorEndpoint: OutputCommitCoordinator stopped!
+18/02/28 10:37:08 INFO SparkContext: Successfully stopped SparkContext
+18/02/28 10:37:08 INFO ShutdownHookManager: Shutdown hook called
+18/02/28 10:37:08 INFO ShutdownHookManager: Deleting directory /tmp/spark-61248224-6aa2-473d-b828-c9ee0c0fc644
+[edureka@localhost sparkjobs]$ spark-submit --verbose --master local --deploy-mode client --jars /home/edureka/SHAHBAZWS/BATCH170917/sparkjobs/mysql-connector-java-5.1.43-bin.jar --class com.laboros.spark.sql.stream.SparkSqlJDBC sparkdemo_2.11-0.1.0-SNAPSHOT.jar
+Using properties file: /usr/lib/spark-2.1.1-bin-hadoop2.7/conf/spark-defaults.conf
+Adding default property: spark.master=spark://localhost:7077
+Parsed arguments:
+  master                  local
+  deployMode              client
+  executorMemory          null
+  executorCores           null
+  totalExecutorCores      null
+  propertiesFile          /usr/lib/spark-2.1.1-bin-hadoop2.7/conf/spark-defaults.conf
+  driverMemory            null
+  driverCores             null
+  driverExtraClassPath    null
+  driverExtraLibraryPath  null
+  driverExtraJavaOptions  null
+  supervise               false
+  queue                   null
+  numExecutors            null
+  files                   null
+  pyFiles                 null
+  archives                null
+  mainClass               com.laboros.spark.sql.stream.SparkSqlJDBC
+  primaryResource         file:/home/edureka/SHAHBAZWS/BATCH170917/sparkjobs/sparkdemo_2.11-0.1.0-SNAPSHOT.jar
+  name                    com.laboros.spark.sql.stream.SparkSqlJDBC
+  childArgs               []
+  jars                    file:/home/edureka/SHAHBAZWS/BATCH170917/sparkjobs/mysql-connector-java-5.1.43-bin.jar
+  packages                null
+  packagesExclusions      null
+  repositories            null
+  verbose                 true
+
+Spark properties used, including those specified through
+ --conf and those from the properties file /usr/lib/spark-2.1.1-bin-hadoop2.7/conf/spark-defaults.conf:
+  spark.master -> spark://localhost:7077
+
+    
+Main class:
+com.laboros.spark.sql.stream.SparkSqlJDBC
+Arguments:
+
+System properties:
+SPARK_SUBMIT -> true
+spark.app.name -> com.laboros.spark.sql.stream.SparkSqlJDBC
+spark.jars -> file:/home/edureka/SHAHBAZWS/BATCH170917/sparkjobs/mysql-connector-java-5.1.43-bin.jar,file:/home/edureka/SHAHBAZWS/BATCH170917/sparkjobs/sparkdemo_2.11-0.1.0-SNAPSHOT.jar
+spark.submit.deployMode -> client
+spark.master -> local
+Classpath elements:
+file:/home/edureka/SHAHBAZWS/BATCH170917/sparkjobs/sparkdemo_2.11-0.1.0-SNAPSHOT.jar
+file:/home/edureka/SHAHBAZWS/BATCH170917/sparkjobs/mysql-connector-java-5.1.43-bin.jar
+
+
+18/02/28 10:39:12 INFO SparkContext: Running Spark version 2.1.1
+18/02/28 10:39:12 WARN NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+18/02/28 10:39:12 WARN Utils: Your hostname, localhost.localdomain resolves to a loopback address: 127.0.0.1; using 10.0.2.15 instead (on interface enp0s3)
+18/02/28 10:39:12 WARN Utils: Set SPARK_LOCAL_IP if you need to bind to another address
+18/02/28 10:39:13 INFO SecurityManager: Changing view acls to: edureka
+18/02/28 10:39:13 INFO SecurityManager: Changing modify acls to: edureka
+18/02/28 10:39:13 INFO SecurityManager: Changing view acls groups to: 
+18/02/28 10:39:13 INFO SecurityManager: Changing modify acls groups to: 
+18/02/28 10:39:13 INFO SecurityManager: SecurityManager: authentication disabled; ui acls disabled; users  with view permissions: Set(edureka); groups with view permissions: Set(); users  with modify permissions: Set(edureka); groups with modify permissions: Set()
+18/02/28 10:39:13 INFO Utils: Successfully started service 'sparkDriver' on port 37276.
+18/02/28 10:39:13 INFO SparkEnv: Registering MapOutputTracker
+18/02/28 10:39:13 INFO SparkEnv: Registering BlockManagerMaster
+18/02/28 10:39:13 INFO BlockManagerMasterEndpoint: Using org.apache.spark.storage.DefaultTopologyMapper for getting topology information
+18/02/28 10:39:13 INFO BlockManagerMasterEndpoint: BlockManagerMasterEndpoint up
+18/02/28 10:39:13 INFO DiskBlockManager: Created local directory at /tmp/blockmgr-4ff799fb-2830-4d87-9fe0-bc3a02ad450b
+18/02/28 10:39:13 INFO MemoryStore: MemoryStore started with capacity 366.3 MB
+18/02/28 10:39:13 INFO SparkEnv: Registering OutputCommitCoordinator
+18/02/28 10:39:14 INFO Utils: Successfully started service 'SparkUI' on port 4040.
+18/02/28 10:39:14 INFO SparkUI: Bound SparkUI to 0.0.0.0, and started at http://10.0.2.15:4040
+18/02/28 10:39:14 INFO SparkContext: Added JAR file:/home/edureka/SHAHBAZWS/BATCH170917/sparkjobs/mysql-connector-java-5.1.43-bin.jar at spark://10.0.2.15:37276/jars/mysql-connector-java-5.1.43-bin.jar with timestamp 1519794554305
+18/02/28 10:39:14 INFO SparkContext: Added JAR file:/home/edureka/SHAHBAZWS/BATCH170917/sparkjobs/sparkdemo_2.11-0.1.0-SNAPSHOT.jar at spark://10.0.2.15:37276/jars/sparkdemo_2.11-0.1.0-SNAPSHOT.jar with timestamp 1519794554307
+18/02/28 10:39:14 INFO Executor: Starting executor ID driver on host localhost
+18/02/28 10:39:14 INFO Utils: Successfully started service 'org.apache.spark.network.netty.NettyBlockTransferService' on port 43233.
+18/02/28 10:39:14 INFO NettyBlockTransferService: Server created on 10.0.2.15:43233
+18/02/28 10:39:14 INFO BlockManager: Using org.apache.spark.storage.RandomBlockReplicationPolicy for block replication policy
+18/02/28 10:39:14 INFO BlockManagerMaster: Registering BlockManager BlockManagerId(driver, 10.0.2.15, 43233, None)
+18/02/28 10:39:14 INFO BlockManagerMasterEndpoint: Registering block manager 10.0.2.15:43233 with 366.3 MB RAM, BlockManagerId(driver, 10.0.2.15, 43233, None)
+18/02/28 10:39:14 INFO BlockManagerMaster: Registered BlockManager BlockManagerId(driver, 10.0.2.15, 43233, None)
+18/02/28 10:39:14 INFO BlockManager: Initialized BlockManager: BlockManagerId(driver, 10.0.2.15, 43233, None)
+18/02/28 10:39:14 INFO SharedState: Warehouse path is 'file:/home/edureka/SHAHBAZWS/BATCH170917/sparkjobs/spark-warehouse/'.
+Wed Feb 28 10:39:15 IST 2018 WARN: Establishing SSL connection without server's identity verification is not recommended. According to MySQL 5.5.45+, 5.6.26+ and 5.7.6+ requirements SSL connection must be established by default if explicit option isn't set. For compliance with existing applications not using SSL the verifyServerCertificate property is set to 'false'. You need either to explicitly disable SSL by setting useSSL=false, or set useSSL=true and provide truststore for server certificate verification.
+root
+ |-- fips: string (nullable = false)
+ |-- area_name: string (nullable = true)
+ |-- state_abbreviation: string (nullable = true)
+ |-- Population_2014: integer (nullable = true)
+ |-- Population_2010_Apr1: integer (nullable = true)
+ |-- Change_in_Population_percent: double (nullable = true)
+ |-- Population_2010: integer (nullable = true)
+ |-- Persons_under_5: double (nullable = true)
+ |-- Persons_under_18: double (nullable = true)
+ |-- Persons_65_years_over: double (nullable = true)
+ |-- Female_persons_percent: double (nullable = true)
+ |-- White_alone: double (nullable = true)
+ |-- Black_or_African_American_alone: double (nullable = true)
+ |-- American_Indian_and_Alaska_Native_alone: double (nullable = true)
+ |-- Asian_alone: double (nullable = true)
+ |-- Native_Hawaiian_and_Other_Pacific_Islander_alone: double (nullable = true)
+ |-- Two_or_More_Races: double (nullable = true)
+ |-- Hispanic_or_Latino: double (nullable = true)
+ |-- White_alone_not_Hispanic_or_Latino: double (nullable = true)
+ |-- Living_in_same_house_1_year_over: double (nullable = true)
+ |-- Foreign_born_persons: double (nullable = true)
+ |-- Language_other_than_English_spoken_at_home: double (nullable = true)
+ |-- High_school_graduate_or_higher: double (nullable = true)
+ |-- Bachelor_degree_or_higher: double (nullable = true)
+ |-- Veterans: integer (nullable = true)
+ |-- Mean_travel_time_to_work: double (nullable = true)
+ |-- Housing_units: integer (nullable = true)
+ |-- Homeownership_rate: double (nullable = true)
+ |-- Housing_units_in_multi_unit_structures: double (nullable = true)
+ |-- Median_value_of_owner_occupied_housing_units: integer (nullable = true)
+ |-- Households: integer (nullable = true)
+ |-- Persons_per_household: double (nullable = true)
+ |-- Per_capita_money_income: integer (nullable = true)
+ |-- Median_household_income: integer (nullable = true)
+ |-- Persons_below_poverty_level: double (nullable = true)
+ |-- Private_nonfarm_establishments: integer (nullable = true)
+ |-- Private_nonfarm_employment: integer (nullable = true)
+ |-- Private_nonfarm_employment_percentage_change: double (nullable = true)
+ |-- Nonemployer_establishments: integer (nullable = true)
+ |-- Total_number_of_firms: integer (nullable = true)
+ |-- Black_owned_firms: double (nullable = true)
+ |-- American_Indian_and_Alaska_Native_owned_firms: double (nullable = true)
+ |-- Asian_owned_firms: double (nullable = true)
+ |-- Native_Hawaiian_and_Other_Pacific_Islander_owned_firms: double (nullable = true)
+ |-- Hispanic_owned_firms: double (nullable = true)
+ |-- Women_owned_firms: double (nullable = true)
+ |-- Manufacturers_shipments: double (nullable = true)
+ |-- Merchant_wholesaler_sales: double (nullable = true)
+ |-- Retail_sales: double (nullable = true)
+ |-- Retail_sales_per_capita: integer (nullable = true)
+ |-- Accommodation_and_food_services_sales: integer (nullable = true)
+ |-- Building_permits: integer (nullable = true)
+ |-- Land_area_in_square_miles: double (nullable = true)
+ |-- Population_per_square_mile: double (nullable = true)
+
+18/02/28 10:39:20 WARN Utils: Truncated the string representation of a plan since it was too large. This behavior can be adjusted by setting 'spark.debug.maxToStringFields' in SparkEnv.conf.
+18/02/28 10:39:21 INFO CodeGenerator: Code generated in 408.906753 ms
+18/02/28 10:39:21 INFO SparkContext: Starting job: show at SparkSqlJDBC.scala:30
+18/02/28 10:39:21 INFO DAGScheduler: Got job 0 (show at SparkSqlJDBC.scala:30) with 1 output partitions
+18/02/28 10:39:21 INFO DAGScheduler: Final stage: ResultStage 0 (show at SparkSqlJDBC.scala:30)
+18/02/28 10:39:21 INFO DAGScheduler: Parents of final stage: List()
+18/02/28 10:39:21 INFO DAGScheduler: Missing parents: List()
+18/02/28 10:39:21 INFO DAGScheduler: Submitting ResultStage 0 (MapPartitionsRDD[2] at show at SparkSqlJDBC.scala:30), which has no missing parents
+18/02/28 10:39:21 INFO MemoryStore: Block broadcast_0 stored as values in memory (estimated size 7.1 KB, free 366.3 MB)
+18/02/28 10:39:21 INFO MemoryStore: Block broadcast_0_piece0 stored as bytes in memory (estimated size 4.0 KB, free 366.3 MB)
+18/02/28 10:39:21 INFO BlockManagerInfo: Added broadcast_0_piece0 in memory on 10.0.2.15:43233 (size: 4.0 KB, free: 366.3 MB)
+18/02/28 10:39:21 INFO SparkContext: Created broadcast 0 from broadcast at DAGScheduler.scala:996
+18/02/28 10:39:21 INFO DAGScheduler: Submitting 1 missing tasks from ResultStage 0 (MapPartitionsRDD[2] at show at SparkSqlJDBC.scala:30)
+18/02/28 10:39:21 INFO TaskSchedulerImpl: Adding task set 0.0 with 1 tasks
+18/02/28 10:39:22 INFO TaskSetManager: Starting task 0.0 in stage 0.0 (TID 0, localhost, executor driver, partition 0, PROCESS_LOCAL, 5869 bytes)
+18/02/28 10:39:22 INFO Executor: Running task 0.0 in stage 0.0 (TID 0)
+18/02/28 10:39:22 INFO Executor: Fetching spark://10.0.2.15:37276/jars/sparkdemo_2.11-0.1.0-SNAPSHOT.jar with timestamp 1519794554307
+18/02/28 10:39:22 INFO TransportClientFactory: Successfully created connection to /10.0.2.15:37276 after 50 ms (0 ms spent in bootstraps)
+18/02/28 10:39:22 INFO Utils: Fetching spark://10.0.2.15:37276/jars/sparkdemo_2.11-0.1.0-SNAPSHOT.jar to /tmp/spark-744ba28a-03fd-4e9f-963c-2609f26a4e19/userFiles-fef853f8-4ff4-4120-96a1-3c856acf500d/fetchFileTemp814171552435975454.tmp
+18/02/28 10:39:22 INFO Executor: Adding file:/tmp/spark-744ba28a-03fd-4e9f-963c-2609f26a4e19/userFiles-fef853f8-4ff4-4120-96a1-3c856acf500d/sparkdemo_2.11-0.1.0-SNAPSHOT.jar to class loader
+18/02/28 10:39:22 INFO Executor: Fetching spark://10.0.2.15:37276/jars/mysql-connector-java-5.1.43-bin.jar with timestamp 1519794554305
+18/02/28 10:39:22 INFO Utils: Fetching spark://10.0.2.15:37276/jars/mysql-connector-java-5.1.43-bin.jar to /tmp/spark-744ba28a-03fd-4e9f-963c-2609f26a4e19/userFiles-fef853f8-4ff4-4120-96a1-3c856acf500d/fetchFileTemp2626620707791136204.tmp
+18/02/28 10:39:22 INFO Executor: Adding file:/tmp/spark-744ba28a-03fd-4e9f-963c-2609f26a4e19/userFiles-fef853f8-4ff4-4120-96a1-3c856acf500d/mysql-connector-java-5.1.43-bin.jar to class loader
+Wed Feb 28 10:39:22 IST 2018 WARN: Establishing SSL connection without server's identity verification is not recommended. According to MySQL 5.5.45+, 5.6.26+ and 5.7.6+ requirements SSL connection must be established by default if explicit option isn't set. For compliance with existing applications not using SSL the verifyServerCertificate property is set to 'false'. You need either to explicitly disable SSL by setting useSSL=false, or set useSSL=true and provide truststore for server certificate verification.
+18/02/28 10:39:22 INFO JDBCRDD: closed connection
+18/02/28 10:39:22 INFO Executor: Finished task 0.0 in stage 0.0 (TID 0). 1525 bytes result sent to driver
+18/02/28 10:39:22 INFO DAGScheduler: ResultStage 0 (show at SparkSqlJDBC.scala:30) finished in 0.729 s
+18/02/28 10:39:22 INFO TaskSetManager: Finished task 0.0 in stage 0.0 (TID 0) in 683 ms on localhost (executor driver) (1/1)
+18/02/28 10:39:22 INFO TaskSchedulerImpl: Removed TaskSet 0.0, whose tasks have all completed, from pool 
+18/02/28 10:39:22 INFO DAGScheduler: Job 0 finished: show at SparkSqlJDBC.scala:30, took 1.256299 s
+18/02/28 10:39:22 INFO CodeGenerator: Code generated in 74.858288 ms
++-----+----------+
+| fips|Households|
++-----+----------+
+|    0| 115610216|
+| 1000|   1838683|
+|10000|    335707|
+|10001|     58524|
+|10003|    200739|
+|10005|     76444|
+| 1001|     20071|
+| 1003|     73283|
+| 1005|      9200|
+| 1007|      7091|
++-----+----------+
+
+18/02/28 10:39:23 INFO SparkSqlParser: Parsing command: v_elections
+18/02/28 10:39:23 INFO SparkSqlParser: Parsing command: select fips, Households from v_elections
+18/02/28 10:39:23 INFO SparkContext: Starting job: show at SparkSqlJDBC.scala:34
+18/02/28 10:39:23 INFO DAGScheduler: Got job 1 (show at SparkSqlJDBC.scala:34) with 1 output partitions
+18/02/28 10:39:23 INFO DAGScheduler: Final stage: ResultStage 1 (show at SparkSqlJDBC.scala:34)
+18/02/28 10:39:23 INFO DAGScheduler: Parents of final stage: List()
+18/02/28 10:39:23 INFO DAGScheduler: Missing parents: List()
+18/02/28 10:39:23 INFO DAGScheduler: Submitting ResultStage 1 (MapPartitionsRDD[6] at show at SparkSqlJDBC.scala:34), which has no missing parents
+18/02/28 10:39:23 INFO MemoryStore: Block broadcast_1 stored as values in memory (estimated size 7.1 KB, free 366.3 MB)
+18/02/28 10:39:23 INFO MemoryStore: Block broadcast_1_piece0 stored as bytes in memory (estimated size 4.0 KB, free 366.3 MB)
+18/02/28 10:39:23 INFO BlockManagerInfo: Added broadcast_1_piece0 in memory on 10.0.2.15:43233 (size: 4.0 KB, free: 366.3 MB)
+18/02/28 10:39:23 INFO SparkContext: Created broadcast 1 from broadcast at DAGScheduler.scala:996
+18/02/28 10:39:23 INFO DAGScheduler: Submitting 1 missing tasks from ResultStage 1 (MapPartitionsRDD[6] at show at SparkSqlJDBC.scala:34)
+18/02/28 10:39:23 INFO TaskSchedulerImpl: Adding task set 1.0 with 1 tasks
+18/02/28 10:39:23 INFO TaskSetManager: Starting task 0.0 in stage 1.0 (TID 1, localhost, executor driver, partition 0, PROCESS_LOCAL, 5869 bytes)
+18/02/28 10:39:23 INFO Executor: Running task 0.0 in stage 1.0 (TID 1)
+Wed Feb 28 10:39:23 IST 2018 WARN: Establishing SSL connection without server's identity verification is not recommended. According to MySQL 5.5.45+, 5.6.26+ and 5.7.6+ requirements SSL connection must be established by default if explicit option isn't set. For compliance with existing applications not using SSL the verifyServerCertificate property is set to 'false'. You need either to explicitly disable SSL by setting useSSL=false, or set useSSL=true and provide truststore for server certificate verification.
+18/02/28 10:39:23 INFO JDBCRDD: closed connection
+18/02/28 10:39:23 INFO Executor: Finished task 0.0 in stage 1.0 (TID 1). 1612 bytes result sent to driver
+18/02/28 10:39:23 INFO TaskSetManager: Finished task 0.0 in stage 1.0 (TID 1) in 203 ms on localhost (executor driver) (1/1)
+18/02/28 10:39:23 INFO TaskSchedulerImpl: Removed TaskSet 1.0, whose tasks have all completed, from pool 
+18/02/28 10:39:23 INFO DAGScheduler: ResultStage 1 (show at SparkSqlJDBC.scala:34) finished in 0.204 s
+18/02/28 10:39:23 INFO DAGScheduler: Job 1 finished: show at SparkSqlJDBC.scala:34, took 0.225527 s
++-----+----------+
+| fips|Households|
++-----+----------+
+|    0| 115610216|
+| 1000|   1838683|
+|10000|    335707|
+|10001|     58524|
+|10003|    200739|
+|10005|     76444|
+| 1001|     20071|
+| 1003|     73283|
+| 1005|      9200|
+| 1007|      7091|
++-----+----------+
+
+18/02/28 10:39:23 INFO SparkContext: Invoking stop() from shutdown hook
+18/02/28 10:39:23 INFO SparkUI: Stopped Spark web UI at http://10.0.2.15:4040
+18/02/28 10:39:23 INFO BlockManagerInfo: Removed broadcast_0_piece0 on 10.0.2.15:43233 in memory (size: 4.0 KB, free: 366.3 MB)
+18/02/28 10:39:23 INFO MapOutputTrackerMasterEndpoint: MapOutputTrackerMasterEndpoint stopped!
+18/02/28 10:39:24 INFO MemoryStore: MemoryStore cleared
+18/02/28 10:39:24 INFO BlockManager: BlockManager stopped
+18/02/28 10:39:24 INFO BlockManagerMaster: BlockManagerMaster stopped
+18/02/28 10:39:24 INFO OutputCommitCoordinator$OutputCommitCoordinatorEndpoint: OutputCommitCoordinator stopped!
+18/02/28 10:39:24 INFO SparkContext: Successfully stopped SparkContext
+18/02/28 10:39:24 INFO ShutdownHookManager: Shutdown hook called
+18/02/28 10:39:24 INFO ShutdownHookManager: Deleting directory /tmp/spark-744ba28a-03fd-4e9f-963c-2609f26a4e19
+[edureka@localhost sparkjobs]$ 
